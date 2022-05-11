@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<script src="./js/jquery-1.12.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./js/xlsx.full.min.js" type="text/javascript" charset="utf-8"></script>
+	<body>
+		<table id="stuTable" border="1">
+			<tr>
+				<td>编号</td>
+				<td>姓名</td>
+				<td>年龄</td>
+				<td>班级</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>张三</td>
+				<td>18</td>
+				<td>1901</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>李四</td>
+				<td>20</td>
+				<td>1902</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>王五</td>
+				<td>22</td>
+				<td>1903</td>
+			</tr>
+		</table>
+		<br>
+		<button onclick="downloadStu()">下载</button>
+	</body>
+	<script>
+	function downloadStu(){
+		console.log("测试下载点击事件...");
+		var stuDataArr = [];
+		// 1.得到表格数据
+		$("#stuTable tr").each(function(){
+			console.log("tr...");
+			var sid = $(this).find("td").eq(0).text();
+			var sname = $(this).find("td").eq(1).text();
+			var sage = $(this).find("td").eq(2).text();
+			var sclass = $(this).find("td").eq(3).text();
+			var stuObj = {};
+			stuObj.stuid = sid;
+			stuObj.stuname =sname;
+			stuObj.stuage = sage;
+			stuObj.stuclass = sclass;
+			stuDataArr.push(stuObj);
+			
+		} )
+		console.log("测试"+stuDataArr);
+		console.log("测试"+JSON.stringify(stuDataArr) );
+		//2. 放置在excel中，并下载
+		// 创建excel对象
+		var sheetObj = XLSX.utils.book_new();
+		// 数据的放置
+		var sheetData = XLSX.utils.json_to_sheet(stuDataArr);
+		// 设置名字
+		XLSX.utils.book_append_sheet(sheetObj,sheetData,"学生信息");
+		// 下载时Excel的名字
+		XLSX.writeFile(sheetObj,"学生表格.xlsx")
+	}
+	</script>
+</html>
